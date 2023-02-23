@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="http://101.42.231.79/js/large.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 先引入 Vue -->
+    <script src="https://hjl-1258198683.cos.ap-beijing.myqcloud.com/js/vue.min.js"></script>
+    <!-- elementUi -->
+    <link rel="stylesheet" href="https://hjl-1258198683.cos.ap-beijing.myqcloud.com/js/index.css">
+    <!-- swiper -->
+    <link rel="stylesheet" href="https://assets-1251943848.file.myqcloud.com/third_js/swiper/swiper@7.4.1.min.css">
+    <!-- 引入组件库 -->
+    <script src="https://assets-1251943848.file.myqcloud.com/third_js/swiper/swiper@7.4.1.min.js"></script>
+    <script src="https://hjl-1258198683.cos.ap-beijing.myqcloud.com/js/elementUi.js"></script>
+
+    <title>hjl</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #app {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        p {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .el-image-viewer__mask {
+            opacity: 0.8 !important;
+        }
+
+        .infinite-list-item {
+            width: 45%;
+            min-height: 40vw;
+            margin-top: 10px;
+            list-style: none;
+        }
+
+        .infinite-list {
+            width: 100%;
+            position: absolute;
+            height: calc(100% - 30px);
+            overflow-y: auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .popBar {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            color: #fff;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+        }
+
+        .swiper-button-prev,
+        .swiper-button-next {
+            color: #fff;
+        }
+
+        .closeImg {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            width: 22px;
+            height: 22px;
+            color: #fff;
+            z-index: 9;
+        }
+        .closeImg img{
+            width: 100%;
+            height: 100%;
+        }
+        .popTitle{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 10px;
+            margin: auto;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-loading="loading">
+        <p>点击查看大图</p>
+        <div class="contentbar">
+            <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
+                <li v-for="index in count" :key="index" class="infinite-list-item">
+                    <el-image :src="srcList[index]" style="width:100%" :z-index="index" @click="clickImg(index)">
+                    </el-image>
+                </li>
+            </ul>
+        </div>
+        <div class="popBar" v-show="isShowPop">
+            <div class="closeImg" @click="closeImgPop()"><img src="https://jdxl-img.jdxlt.com/uploads/654b2306e4804e55acab3b2fd73628ac.png" alt=""></div>
+            <p class="popTitle">左右滑动观看</p>
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(item,index) in srcList" :key="index" @click="closeImgPop()">
+                        <img class="swiper-lazy "  :data-src="item"
+                            src="https://hjl-1258198683.cos.ap-beijing.myqcloud.com/loading.gif?imageMogr2/thumbnail/!50p"
+                            alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- 引入组件库 -->
+<script>
+
+
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                srcList: [],
+                count: 10,
+                isShowPop: false,
+                mySwiper: null,
+                loading:true,
+            }
+        },
+        created () {
+            let newData = []
+            for (let index = 1; index < 61; index++) {
+                newData.push('https://hjl-1258198683.cos.ap-beijing.myqcloud.com/hsz/hunshazhao' + index + '.JPG?imageMogr2/thumbnail/!50p')
+            }
+            this.srcList = newData
+            setTimeout(() => {
+                this.loading=false
+            }, 3000);
+        },
+        methods: {
+            load () {
+                if(this.count<59){
+                    this.count += 2
+                }
+            },
+            clickImg (index) {
+                this.isShowPop = true
+                this.mySwiper = new Swiper('.swiper', {
+                    loop: true, // 循环模式选项
+                    lazy: {
+                        loadPrevNext: true,
+                    },
+                })
+                this.mySwiper.slideTo(index+1);
+            },
+            closeImgPop () {
+                this.isShowPop = false
+            }
+        },
+    })
+</script>
+
+</html>
