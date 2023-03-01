@@ -43,16 +43,16 @@ const LoginForm = (props: any) => {
 			form={form}
 			name="basic"
 			labelCol={{ span: 5 }}
-			initialValues={{ remember: true }}
+			initialValues={{ remember: true, username: "admin", password: "123456" }}
 			onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
 			size="large"
 			autoComplete="off"
 		>
-			<Form.Item name="username" rules={[{ required: true, message: "请输入用户名" }]}>
+			<Form.Item name="username" rules={[{ required: false, message: "请输入用户名" }]}>
 				<Input placeholder="用户名：admin / user" prefix={<UserOutlined />} />
 			</Form.Item>
-			<Form.Item name="password" rules={[{ required: true, message: "请输入密码" }]}>
+			<Form.Item name="password" rules={[{ required: false, message: "请输入密码" }]}>
 				<Input.Password autoComplete="new-password" placeholder="密码：123456" prefix={<LockOutlined />} />
 			</Form.Item>
 			<Form.Item className="login-btn">
